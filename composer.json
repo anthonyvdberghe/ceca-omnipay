@@ -1,5 +1,5 @@
 {
-    "name": "jdominguez/ceca-omnipay",
+    "name": "jdominguezpaz/ceca-omnipay",
     "type": "symfony-bundle",
     "description": "CECA payment gateway implementation with omnipay",
     "license": "GPLv2",
