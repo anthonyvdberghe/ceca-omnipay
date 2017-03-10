@@ -20,9 +20,6 @@ class PurchaseRequest extends AbstractRequest
 
 
 
-
-
-
     //Set merchanID - required
     public function setMerchantID($MerchantID)
     {
@@ -48,7 +45,6 @@ class PurchaseRequest extends AbstractRequest
     {
         return $this->setParameter('Exponente', $Exponente);
     }    
-    //Set Idioma - required
     public function setIdioma($Idioma)
     {
         return $this->setParameter('Idioma', $Idioma);
@@ -57,17 +53,14 @@ class PurchaseRequest extends AbstractRequest
     {
         return $this->setParameter('Cifrado', $Cifrado);
     }
-    //Set Idioma - required
     public function setClaveEncriptacion($clave_encriptacion)
     {
         return $this->setParameter('clave_encriptacion', $clave_encriptacion);
     }
-    //Set Idioma - required
     public function setURL_OK($url)
     {
         return $this->setParameter('URL_OK', $url);
     }
-    //Set Idioma - required
     public function setURL_NOK($url)
     {
         return $this->setParameter('URL_NOK', $url);
@@ -76,12 +69,14 @@ class PurchaseRequest extends AbstractRequest
     {
         return $this->setParameter('Num_operacion', $Num_operacion);
     }
-
     public function setPagoSoportado($Pago_soportado)
     {
         return $this->setParameter('Pago_soportado', $Pago_soportado);
     }
-
+    public function setDescripcion($Descripcion)
+    {
+        return $this->setParameter('Descripcion', $Descripcion);
+    }
 
 
 
@@ -107,6 +102,7 @@ class PurchaseRequest extends AbstractRequest
         $data['Cifrado'] = $this->getParameter('Cifrado');
         $data['Idioma'] = $this->getParameter('Idioma');
         $data['Pago_soportado'] = $this->getParameter('Pago_soportado');
+        $data['Descripcion'] = $this->getParameter('Descripcion');
 
         $data['Firma'] = $this->generateSignature($data, $clave_encriptacion);
         return $data;

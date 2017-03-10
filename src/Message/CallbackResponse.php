@@ -32,32 +32,41 @@ class CallbackResponse
      */
     public function isSuccessful()
     {
-        $rawParameters = $this->request->get('Ds_MerchantParameters');
-        \Cake\Log\Log::notice('CallbackResponse');
-        \Cake\Log\Log::notice($this->request->get('MerchantID'));
-        $decodedParameters = json_decode(base64_decode(strtr($rawParameters, '-_', '+/')), true);
+        $returnedParameters = [];
+        $returnedParameters['MerchantID'] = $this->request->get('MerchantID');
+        $returnedParameters['AcquirerBIN'] = $this->request->get('AcquirerBIN');
+        $returnedParameters['TerminalID'] = $this->request->get('TerminalID');
+        $returnedParameters['Num_operacion'] = $this->request->get('Num_operacion');
+        $returnedParameters['Importe'] = $this->request->get('Importe');
+        $returnedParameters['TipoMoneda'] = $this->request->get('TipoMoneda');
+        $returnedParameters['Exponente'] = $this->request->get('Exponente');
+        $returnedParameters['Referencia'] = $this->request->get('Referencia');
+        
+        $firma = $this->request->get('Firma');
 
-        if (!$this->checkSignature(
-            $rawParameters,
-            $decodedParameters['Ds_Order'],
-            $this->request->get('Ds_Signature')
-        )
-        ) {
+        if (!$this->checkSignature($returnedParameters, $firma)) {
             throw new BadSignatureException();
-        }
-
-        //check response, code "000" to "099" means success
-        if ((int)$decodedParameters['Ds_Response'] > 99) {
-            throw new CallbackException(null, (int)$decodedParameters['Ds_Response']);
         }
 
         return true;
     }
 
-    private function checkSignature($data, $orderId, $expectedSignature)
+    private function checkSignature($data, $expectedSignature)
     {
-        $key = Encryptor::encrypt_3DES($orderId, base64_decode($this->merchantKey));
+        //Clave_encriptacion+MerchantID+AcquirerBIN+TerminalID+Num_operacion+Importe+TipoMoneda+Exponente+Referencia
+        $signature = 
+            $this->merchantKey 
+            . $data['MerchantID'] 
+            . $data['AcquirerBIN'] 
+            . $data['TerminalID'] 
+            . $data['Num_operacion'] 
+            . $data['Importe'] 
+            . $data['TipoMoneda'] 
+            . $data['Exponente'] 
+            . $data['Referencia'];
 
-        return strtr(base64_encode(hash_hmac('sha256', $data, $key, true)), '+/', '-_') == $expectedSignature;
+        $signature = strtolower(sha1($signature));
+
+        return $signature == $expectedSignature;
     }
 }

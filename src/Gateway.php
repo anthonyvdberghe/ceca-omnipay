@@ -104,6 +104,24 @@ class Gateway extends AbstractGateway
 
     public function decodeCallbackResponse(Request $request)
     {
-        return json_decode(base64_decode(strtr($request->get('Ds_MerchantParameters'), '-_', '+/')), true);
+
+        $returnedParameters = [];
+        $returnedParameters['MerchantID'] = $request->get('MerchantID');
+        $returnedParameters['AcquirerBIN'] = $request->get('AcquirerBIN');
+        $returnedParameters['TerminalID'] = $request->get('TerminalID');
+        $returnedParameters['Num_operacion'] = $request->get('Num_operacion');
+        $returnedParameters['Importe'] = $request->get('Importe');
+        $returnedParameters['TipoMoneda'] = $request->get('TipoMoneda');
+        $returnedParameters['Exponente'] = $request->get('Exponente');
+        $returnedParameters['Referencia'] = $request->get('Referencia');
+        $returnedParameters['Num_aut'] = $request->get('Num_aut');
+        $returnedParameters['BIN'] = $request->get('BIN');
+        $returnedParameters['FinalPAN'] = $request->get('FinalPAN');
+        $returnedParameters['Cambio_moneda'] = $request->get('Cambio_moneda');
+        $returnedParameters['Pais'] = $request->get('Pais');
+        $returnedParameters['Tipo_tarjeta'] = $request->get('Tipo_tarjeta');
+        $returnedParameters['Descripcion'] = $request->get('Descripcion');
+
+        return $returnedParameters;
     }
 }
