@@ -3,7 +3,7 @@
 namespace Omnipay\Ceca\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
-use Omnipay\RedSys\ResponseCode;
+use Omnipay\Ceca\ResponseCode;
 
 /**
  * RedSys Complete Purchase Response     SWISNL
