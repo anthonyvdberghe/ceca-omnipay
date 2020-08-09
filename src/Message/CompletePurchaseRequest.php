@@ -23,7 +23,7 @@ class CompletePurchaseRequest extends PurchaseRequest
 		$data['Ds_Merchant_Terminal'] = $this->getParameter('terminal');
 		$data['Ds_Merchant_Currency'] = $this->getCurrency();
 		$data['Ds_Merchant_TransactionType'] = $this->getTransactionType();
-		$data['Ds_Merchant_Amount'] = (float)$this->getAmount();
+		$data['Ds_Merchant_Amount'] = $this->getAmount();
 		$data['Ds_Merchant_Order'] = $this->getToken();
 		$data['Ds_Merchant_Identifier'] = $this->getParameter('identifier');
 		$data['Ds_Merchant_MerchantURL'] = $this->getParameter('merchantURL');

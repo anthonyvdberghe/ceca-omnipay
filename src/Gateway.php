@@ -29,7 +29,7 @@ class Gateway extends AbstractGateway
             'TipoMoneda' => '978',
             'Exponente' => '2',
             'Idioma' => '1',
-            'Cifrado' => 'SHA1',
+            'Cifrado' => 'SHA2',
             'Pago_soportado' => 'SSL',
 
             'testMode' => false
@@ -37,7 +37,7 @@ class Gateway extends AbstractGateway
         );
     }
 
-    //Set merchanID - required
+    //Set merchantID - required
     public function setMerchantID($MerchantID)
     {
         return $this->setParameter('MerchantID', $MerchantID);
@@ -62,17 +62,17 @@ class Gateway extends AbstractGateway
     {
         return $this->setParameter('Idioma', $Idioma);
     }
-    //Set Idioma - required
+    //Set Clave Encriptacion - required
     public function setClaveEncriptacion($clave_encriptacion)
     {
         return $this->setParameter('clave_encriptacion', $clave_encriptacion);
     }
-    //Set Idioma - required
+    //Set UrlOk - required
     public function setUrlOk($url)
     {
         return $this->setParameter('URL_OK', $url);
     }
-    //Set Idioma - required
+    //Set UrlNoOk - required
     public function setUrlNoOk($url)
     {
         return $this->setParameter('URL_NOK', $url);

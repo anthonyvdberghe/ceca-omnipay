@@ -65,7 +65,7 @@ class CallbackResponse
             . $data['Exponente'] 
             . $data['Referencia'];
 
-        $signature = strtolower(sha1($signature));
+        $signature = strtolower(hash('sha256',$signature));
 
         return $signature == $expectedSignature;
     }

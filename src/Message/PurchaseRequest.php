@@ -14,8 +14,8 @@ use Omnipay\Ceca\Encryptor\Encryptor;
 class PurchaseRequest extends AbstractRequest
 {
 
-    protected $liveEndpoint = 'https://pgw.ceca.es/cgi-bin/tpv';
-    protected $testEndpoint = 'http://tpv.ceca.es:8000/cgi-bin/tpv';
+    protected $liveEndpoint = 'https://pgw.ceca.es/tpvweb/tpv/compra.action';
+    protected $testEndpoint = 'https://tpv.ceca.es/tpvweb/tpv/compra.action';
 
 
 
@@ -77,10 +77,19 @@ class PurchaseRequest extends AbstractRequest
     {
         return $this->setParameter('Descripcion', $Descripcion);
     }
-
-
-
-
+    public function setMultiply($multiply)
+    {
+        return $this->setParameter('multiply', $multiply);
+    }
+    
+    public function getAmount()
+    {
+        if($this->getParameter('multiply')) {
+            return strval((float)parent::getAmount() * 100);
+        }
+        return (float)parent::getAmount();
+        
+    }
 
 
     public function getData()
@@ -93,7 +102,7 @@ class PurchaseRequest extends AbstractRequest
         $data['TerminalID'] = $this->getParameter('TerminalID');
 
         $data['Num_operacion'] = $this->getParameter('Num_operacion');
-        $data['Importe'] = (float)$this->getAmount();
+        $data['Importe'] = $this->getAmount();
         $data['TipoMoneda'] = $this->getParameter('TipoMoneda');
         $data['Exponente'] = $this->getParameter('Exponente');
         
@@ -138,7 +147,7 @@ class PurchaseRequest extends AbstractRequest
             . $parameters['Cifrado'] 
             . $parameters['URL_OK'] 
             . $parameters['URL_NOK'];
-        $signature = strtolower(sha1($signature));
+        $signature = strtolower(hash('sha256',$signature));
         return $signature;           
     }
 }
