@@ -22,11 +22,11 @@ class Gateway extends AbstractGateway
 
     public function getDefaultParameters()
     {
-        return array(
+        return [
             'MerchantID' => '',
             'AcquirerBIN' => '',
             'TerminalID' => '00000003',
-            'TipoMoneda' => '978',
+            'TipoMoneda' => 'EUR',
             'Exponente' => '2',
             'Idioma' => '1',
             'Cifrado' => 'SHA2',
@@ -34,7 +34,7 @@ class Gateway extends AbstractGateway
 
             'testMode' => false
 
-        );
+        ];
     }
 
     //Set merchantID - required
@@ -77,6 +77,11 @@ class Gateway extends AbstractGateway
     {
         return $this->setParameter('URL_NOK', $url);
     }
+    public function setCurrencyMerchant($currency)
+    {
+        $this->setParameter('merchantCurrency', $currency);
+    }
+
   
 
     public function purchase(array $parameters = array())
@@ -95,10 +100,14 @@ class Gateway extends AbstractGateway
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return type
      */
-    public function checkCallbackResponse(Request $request)
+    public function checkCallbackResponse(Request $request, $returnObject=false)
     {
         $response = new CallbackResponse($request, $this->getParameter('clave_encriptacion'));
 
+        if($returnObject){
+            return $response;
+        }
+        
         return $response->isSuccessful();
     }
 

@@ -4,6 +4,8 @@ namespace Omnipay\Ceca\Message;
 
 use Omnipay\Common\Message\AbstractRequest;
 use Omnipay\Ceca\Encryptor\Encryptor;
+use \Money\Currencies\ISOCurrencies;
+use \Money\Currency;
 
 /**
  * Ceca (Redsys) Purchase Request
@@ -16,8 +18,6 @@ class PurchaseRequest extends AbstractRequest
 
     protected $liveEndpoint = 'https://pgw.ceca.es/tpvweb/tpv/compra.action';
     protected $testEndpoint = 'https://tpv.ceca.es/tpvweb/tpv/compra.action';
-
-
 
 
     //Set merchanID - required
@@ -90,11 +90,15 @@ class PurchaseRequest extends AbstractRequest
         return (float)parent::getAmount();
         
     }
-
+    public function getTransactionType()
+    {
+        return '0';
+    }
+    
 
     public function getData()
     {
-        $data = array();
+        $data = [];
         $clave_encriptacion = $this->getParameter('clave_encriptacion');
 
         $data['MerchantID'] = $this->getParameter('MerchantID');
@@ -103,7 +107,7 @@ class PurchaseRequest extends AbstractRequest
 
         $data['Num_operacion'] = $this->getParameter('Num_operacion');
         $data['Importe'] = $this->getAmount();
-        $data['TipoMoneda'] = $this->getParameter('TipoMoneda');
+        $data['TipoMoneda'] = $this->getCurrencyCeca();
         $data['Exponente'] = $this->getParameter('Exponente');
         
         $data['URL_OK'] = $this->getParameter('URL_OK');
@@ -149,5 +153,12 @@ class PurchaseRequest extends AbstractRequest
             . $parameters['URL_NOK'];
         $signature = strtolower(hash('sha256',$signature));
         return $signature;           
+    }
+    
+    protected function getCurrencyCeca()
+    {
+        $currencies = new ISOCurrencies();
+        
+        return $currencies->numericCodeFor(new Currency($this->getCurrency()));
     }
 }
